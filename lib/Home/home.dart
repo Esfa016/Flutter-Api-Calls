@@ -23,27 +23,29 @@ class _MyHomePageState extends State<MyHomePage> {
             )..add(LoadApiEvent()),
         child: Scaffold(
           floatingActionButton: _elevatedButton(),
-          body: BlocBuilder<HomeBloc, HomeState>(
-            builder: (context, state) {
-              if (state is HomeLoadingState) {
-                return CircularProgressIndicator();
-              } else if (state is HomeLoadedState) {
-                return Center(
-                  child: Column(
-                    children: [
-                      Text(state.boredActivity.activity),
-                      Text(state.boredActivity.key),
-                      Text(state.boredActivity.type),
-                    ],
-                  ),
-                );
-              } else if (state is ErrorState) {
-                return Text(state.error);
-              } else if (state is SayHiState) {
-                return Text(state.msg);
-              }
-              return Container();
-            },
+          body: SafeArea(
+            child: BlocBuilder<HomeBloc, HomeState>(
+              builder: (context, state) {
+                if (state is HomeLoadingState) {
+                  return CircularProgressIndicator();
+                } else if (state is HomeLoadedState) {
+                  return Center(
+                    child: Column(
+                      children: [
+                        Text(state.boredActivity.activity),
+                        Text(state.boredActivity.key),
+                        Text(state.boredActivity.type),
+                      ],
+                    ),
+                  );
+                } else if (state is ErrorState) {
+                  return Text(state.error);
+                } else if (state is SayHiState) {
+                  return Text(state.msg);
+                }
+                return Container();
+              },
+            ),
           ),
         ));
   }

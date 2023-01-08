@@ -5,20 +5,6 @@ import 'package:bloc_with_api/Home/Repository/exceptions.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-// class HomeBloc extends Bloc<HomeEvent, HomeState> {
-//   ActivityRepository repository;
-
-//   HomeBloc(this.repository) : super(HomeLoadingState()) {
-//     on<LoadApiEvent>(event, emit) async {
-//       try {
-//         final activity = repository.getActivities();
-//         emit(HomeLoadedState(boredActivity: activity));
-//       } catch (e) {
-//         emit(ErrorState(e.toString()));
-//       }
-//     }
-//   }
-// }
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ActivityRepository repository;
   HomeBloc(this.repository) : super(HomeLoadingState()) {
@@ -34,6 +20,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             emit(ErrorState('no connection'));
           else if (e.type == DioErrorType.other) {
             emit(ErrorState('something went wrong! try again'));
+          } else if (e.type == DioErrorType.connectTimeout) {
+            emit(ErrorState('connection timeout'));
+          } else if (e.type == DioErrorType.receiveTimeout) {
+            emit(ErrorState('unable to fetch data'));
           }
         }
       },
