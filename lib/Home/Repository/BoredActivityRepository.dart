@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:bloc_with_api/Home/Model/BoredActivity.dart';
 import 'package:dio/dio.dart';
 

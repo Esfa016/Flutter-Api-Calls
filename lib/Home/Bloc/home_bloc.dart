@@ -1,6 +1,8 @@
 import 'package:bloc_with_api/Home/Bloc/home_event.dart';
 import 'package:bloc_with_api/Home/Bloc/home_state.dart';
 import 'package:bloc_with_api/Home/Repository/BoredActivityRepository.dart';
+import 'package:bloc_with_api/Home/Repository/exceptions.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // class HomeBloc extends Bloc<HomeEvent, HomeState> {
@@ -26,9 +28,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           final activity = await repository.getActivities();
           emit(HomeLoadedState(boredActivity: activity));
           print('this event is triggered');
-        } catch (e) {
-          print('this is not');
-          emit(ErrorState(e.toString()));
+        } on DioError catch (e) {
+          print(e.type.name);
+          if (e.type == DioErrorType.connectTimeout)
+            emit(ErrorState('no connection'));
+          else if (e.type == DioErrorType.other) {
+            emit(ErrorState('something went wrong! try again'));
+          }
         }
       },
     );
